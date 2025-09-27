@@ -1,0 +1,17 @@
+export function getInitialTheme() {
+  const savedTheme = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  if (savedTheme) {
+    return savedTheme;
+  } else if (prefersDark) {
+    return "dark";
+  } else {
+    const hours = new Date().getHours();
+    if (hours >= 19 || hours <= 7) {
+      return "dark";
+    } else {
+      return "light";
+    }
+  }
+}
