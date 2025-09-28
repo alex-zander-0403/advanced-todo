@@ -6,17 +6,17 @@ import { getInitialTheme } from "./helpers/getInitialTheme";
 import { toggleTheme } from "./helpers/toggleTheme";
 
 //
-const initialTodos = [
-  { id: 1, text: "первая задача" },
-  { id: 2, text: "вторая задача" },
-  { id: 3, text: "третья задача" },
-  { id: 4, text: "четвертая задача" },
-];
+// const initialTodos = [
+//   { id: 1, text: "первая задача" },
+//   { id: 2, text: "вторая задача" },
+//   { id: 3, text: "третья задача" },
+//   { id: 4, text: "четвертая задача" },
+// ];
 
 //
 function App() {
   //
-  const [todos, setTodos] = useState(initialTodos);
+  const [todos, setTodos] = useState([]);
   const [theme, setTheme] = useState(getInitialTheme());
 
   // -------------------
@@ -26,7 +26,15 @@ function App() {
   }
 
   function onAdd(text) {
-    const newTodo = { id: Date.now(), text };
+    const newTodo = {
+      id: Date.now(),
+      text,
+      isCompleted: false,
+      createdAdd: new Date.toISOString(),
+      deadline: deadline || null,
+      order: todos.length + 1,
+    };
+
     setTodos([...todos, newTodo]);
   }
 
