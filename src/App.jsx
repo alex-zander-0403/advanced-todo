@@ -25,15 +25,17 @@ function App() {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   }
 
-  function onAdd(text) {
+  function onAdd(text, deadline) {
     const newTodo = {
       id: Date.now(),
       text,
       isCompleted: false,
-      createdAdd: new Date.toISOString(),
+      createdAt: new Date().toISOString(),
       deadline: deadline || null,
       order: todos.length + 1,
     };
+
+    console.log(todos);
 
     setTodos([...todos, newTodo]);
   }
