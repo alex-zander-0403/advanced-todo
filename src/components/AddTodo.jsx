@@ -15,7 +15,7 @@ function AddTodo({ onAdd }) {
   //
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex items-center justify-between mb-3 focus-within:ring-2 focus-within:ring-blue-800 bg-white rounded-lg shadow-sm overflow-hidden">
+      <div className="flex items-center justify-between mb-3 focus-within:ring-2 focus-within:ring-blue-800  rounded-lg shadow-sm overflow-hidden">
         <input
           type="text"
           value={value}
