@@ -35,8 +35,6 @@ function App() {
       order: todos.length + 1,
     };
 
-    console.log(todos);
-
     setTodos([...todos, newTodo]);
   }
 
