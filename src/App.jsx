@@ -35,9 +35,23 @@ function App() {
       order: todos.length + 1,
     };
 
-    console.log(todos);
-
     setTodos([...todos, newTodo]);
+  }
+
+  function onToggleComplete(id) {
+    const todoToUpdate = todos.find((todo) => todo.id === id);
+    if (!todoToUpdate) return;
+
+    const updatedTodo = {
+      ...todoToUpdate,
+      completed: !todoToUpdate.completed,
+    };
+
+    const updatedTodos = todos.map((todo) =>
+      todo.id === id ? updatedTodo : todo
+    );
+
+    setTodos(updatedTodos);
   }
 
   //
@@ -57,7 +71,12 @@ function App() {
         <AddTodo onAdd={onAdd} />
         <div className="flex flex-col gap-2">
           {todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} onDelete={onDelete} />
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              onDelete={onDelete}
+              onToggleComplete={onToggleComplete}
+            />
           ))}
         </div>
       </div>
