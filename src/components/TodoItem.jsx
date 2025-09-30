@@ -1,5 +1,3 @@
-
-
 //
 function TodoItem({ todo, onDelete, onToggleComplete }) {
   //
@@ -14,7 +12,7 @@ function TodoItem({ todo, onDelete, onToggleComplete }) {
         <button
           onClick={handleToggle}
           className={`p-1 rounded-full border-2 ${
-            todo.completed
+            todo.isCompleted
               ? "border-green-600 bg-green-300"
               : "border-gray-500 bg-gray-200"
           } transition-colors duration-300 cursor-pointer`}
@@ -30,7 +28,7 @@ function TodoItem({ todo, onDelete, onToggleComplete }) {
             strokeLinecap="round"
             strokeLinejoin="round"
             className={`h-4 w-4 ${
-              todo.completed ? "text-black" : "text-transparent"
+              todo.isCompleted ? "text-black" : "text-transparent"
             }`}
           >
             <path d="M20 6 9 17l-5-5" />
@@ -38,7 +36,7 @@ function TodoItem({ todo, onDelete, onToggleComplete }) {
         </button>
         <div
           className={`${
-            todo.completed
+            todo.isCompleted
               ? "line-through text-gray-500 dark:text-gray-500"
               : "text-gray-700 dark:text-gray-400"
           }`}
@@ -52,7 +50,7 @@ function TodoItem({ todo, onDelete, onToggleComplete }) {
           {todo.deadline && (
             <span
               className={`text-sm  ${
-                todo.completed ? "text-green-800" : "text-red-700"
+                todo.isCompleted ? "text-green-800" : "text-red-700"
               }`}
             >
               сделать до:{" "}
@@ -68,7 +66,7 @@ function TodoItem({ todo, onDelete, onToggleComplete }) {
           {todo.createdAt && (
             <span
               className={`text-sm  ${
-                todo.completed ? "text-green-800" : "text-gray-500"
+                todo.isCompleted ? "text-green-800" : "text-gray-500"
               }`}
             >
               создано:{" "}

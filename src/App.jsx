@@ -16,12 +16,26 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [theme, setTheme] = useState(getInitialTheme());
 
+  //
   useEffect(() => {
     const loadInitialData = async () => {
       const localStorageTodos = JSON.parse(
         localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
       );
+
       setTodos(localStorageTodos);
+
+      try {
+        const response = await fetch(API_URL);
+
+        if (response.ok) {
+          const serverTodos = await response.json();
+          setTodos(serverTodos);
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(serverTodos));
+        }
+      } catch (error) {
+        console.error("Ошибка инициализации данных ->", error.message);
+      }
     };
 
     loadInitialData();
@@ -29,11 +43,7 @@ function App() {
 
   // -------------------
 
-  function onDelete(id) {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
-    //
-  }
-
+  //
   async function onAdd(text, deadline) {
     const newTodo = {
       id: Date.now(),
@@ -45,17 +55,41 @@ function App() {
     };
 
     const updatedTodos = [...todos, newTodo];
+
     setTodos(updatedTodos);
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+    // localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTodo),
+      });
+
+      const createdTodo = await response.json();
+
+      const syncedTodos = updatedTodos.map((todo) =>
+        todo.id === newTodo.id ? createdTodo : todo
+      );
+
+      setTodos(syncedTodos);
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(syncedTodos));
+    } catch (error) {
+      console.error("Ошибка добавления ->", error.message);
+      setTodos(todos);
+    }
   }
 
-  function onToggleComplete(id) {
+  //
+  async function onToggleComplete(id) {
     const todoToUpdate = todos.find((todo) => todo.id === id);
     if (!todoToUpdate) return;
 
     const updatedTodo = {
       ...todoToUpdate,
-      completed: !todoToUpdate.completed,
+      isCompleted: !todoToUpdate.isCompleted,
     };
 
     const updatedTodos = todos.map((todo) =>
@@ -63,9 +97,40 @@ function App() {
     );
 
     setTodos(updatedTodos);
-    console.log("updatedTodos --->", updatedTodos);
 
-    //
+    try {
+      await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTodo),
+      });
+
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+    } catch (error) {
+      console.error("Ошибка обновления ->", error.message);
+      setTodos(todos);
+    }
+  }
+
+  //
+  async function onDelete(id) {
+    const prevTodos = todos;
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+
+    setTodos(updatedTodos);
+
+    try {
+      await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+      });
+
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+    } catch (error) {
+      console.error("Ошибка удаления ->", error.message);
+      setTodos(prevTodos);
+    }
   }
 
   //
