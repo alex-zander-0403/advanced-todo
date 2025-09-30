@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TodoItem from "./components/TodoItem";
 import AddTodo from "./components/AddTodo";
 import ToggleTheme from "./components/ToggleTheme";
@@ -6,26 +6,35 @@ import { getInitialTheme } from "./helpers/getInitialTheme";
 import { toggleTheme } from "./helpers/toggleTheme";
 
 //
-// const initialTodos = [
-//   { id: 1, text: "первая задача" },
-//   { id: 2, text: "вторая задача" },
-//   { id: 3, text: "третья задача" },
-//   { id: 4, text: "четвертая задача" },
-// ];
+const LOCAL_STORAGE_KEY = "todos";
+const API_URL = "https://68671e3ae3fefb261eddbed3.mockapi.io/api/v1/todos";
 
+//
 //
 function App() {
   //
   const [todos, setTodos] = useState([]);
   const [theme, setTheme] = useState(getInitialTheme());
 
+  useEffect(() => {
+    const loadInitialData = async () => {
+      const localStorageTodos = JSON.parse(
+        localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
+      );
+      setTodos(localStorageTodos);
+    };
+
+    loadInitialData();
+  }, []);
+
   // -------------------
 
   function onDelete(id) {
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
+    //
   }
 
-  function onAdd(text, deadline) {
+  async function onAdd(text, deadline) {
     const newTodo = {
       id: Date.now(),
       text,
@@ -35,7 +44,9 @@ function App() {
       order: todos.length + 1,
     };
 
-    setTodos([...todos, newTodo]);
+    const updatedTodos = [...todos, newTodo];
+    setTodos(updatedTodos);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
   }
 
   function onToggleComplete(id) {
@@ -52,6 +63,9 @@ function App() {
     );
 
     setTodos(updatedTodos);
+    console.log("updatedTodos --->", updatedTodos);
+
+    //
   }
 
   //
