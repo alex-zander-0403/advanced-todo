@@ -17,6 +17,8 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [theme, setTheme] = useState(getInitialTheme());
   const [deletingId, setDeletingId] = useState(null);
+  const [isDeletingCompletedModal, setIsDeletingCompletedModal] =
+    useState(false);
 
   //
   useEffect(() => {
@@ -135,6 +137,51 @@ function App() {
     }
   }
 
+  // -----------
+
+  const hasCompletedTodos = todos.some((todo) => todo.isCompleted);
+
+  function handleDeleteAllCompleted() {
+    if (!hasCompletedTodos) return;
+    setIsDeletingCompleted(true);
+  }
+
+  async function confirmDeleteCompleted() {
+    const prevTodos = todos;
+    const completedIds = prevTodos
+      .filter((todo) => todo.isCompleted)
+      .map((todo) => todo.id);
+
+    setTodos(prevTodos.filter((todo) => !todo.isCompleted));
+
+    const failedId = [];
+
+    for (const id of completedIds) {
+      try {
+        await fetch(`${API_URL}/${id}`, {
+          method: "DELETE",
+        });
+      } catch (error) {
+        console.error(
+          `Ошибка удаления одной из выполненных задач(${id}) ->`,
+          error.message
+        );
+        failedId.push(id);
+      }
+    }
+
+    if (failedId.length > 0) {
+      setTodos(
+        prevTodos.filter(
+          (todo) => !todo.completed || failedId.includes(todo.id)
+        )
+      );
+    }
+
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
+    setIsDeletingCompleted(false);
+  }
+
   //
   return (
     <div
@@ -169,7 +216,25 @@ function App() {
             handleDelete(deletingId);
             setDeletingId(null);
           }}
+          message={"Хотите удалить эту задачу?"}
         />
+      )}
+
+      {isDeletingCompletedModal && (
+        <DeleteConfirmModal
+          onCancel={() => setIsDeletingCompletedModal(false)}
+          onConfirm={confirmDeleteCompleted}
+          message={`Вы уверенны, что хотите удалить выполненные задачи? (${todos.filter((el) => el.isCompleted).length})`}
+        />
+      )}
+
+      {hasCompletedTodos && (
+        <button
+          className="px-5 py-2 mt-5 text-white rounded transition-colors bg-red-700 hover:bg-red-500 dark:bg-red-700 dark:hover:bg-red-500 cursor-pointer"
+          onClick={handleDeleteAllCompleted}
+        >
+          Удалить все выполненные
+        </button>
       )}
     </div>
   );

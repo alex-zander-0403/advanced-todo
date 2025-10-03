@@ -1,4 +1,4 @@
-function DeleteConfirmModal({ onCancel, onConfirm }) {
+function DeleteConfirmModal({ onCancel, onConfirm, message }) {
   //
 
   //
@@ -8,8 +8,8 @@ function DeleteConfirmModal({ onCancel, onConfirm }) {
 
       <div className="relative z-11 flex h-full items-center justify-center">
         <div className="p-5 rounded-md shadow-xl max-w-md w-full bg-white text-gray-700 dark:bg-gray-800 dark:text-white">
-          <h3 className="text-center text-xl font-bold mb-4">Удалить?</h3>
-          <p className="mb-6">Вы действительно хотите удалить задачу?</p>
+          <h3 className="text-center text-xl font-bold mb-4">Удаление</h3>
+          <p className="mb-6">{message}</p>
 
           <div className="flex justify-end gap-3">
             <button
