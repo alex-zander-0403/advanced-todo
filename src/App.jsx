@@ -4,6 +4,7 @@ import AddTodo from "./components/AddTodo";
 import ToggleTheme from "./components/ToggleTheme";
 import { getInitialTheme } from "./helpers/getInitialTheme";
 import { toggleTheme } from "./helpers/toggleTheme";
+import DeleteConfirmModal from "./components/ConfirmDeleteModal";
 
 //
 const LOCAL_STORAGE_KEY = "todos";
@@ -15,6 +16,7 @@ function App() {
   //
   const [todos, setTodos] = useState([]);
   const [theme, setTheme] = useState(getInitialTheme());
+  const [deletingId, setDeletingId] = useState(null);
 
   //
   useEffect(() => {
@@ -115,7 +117,7 @@ function App() {
   }
 
   //
-  async function onDelete(id) {
+  async function handleDelete(id) {
     const prevTodos = todos;
     const updatedTodos = todos.filter((todo) => todo.id !== id);
 
@@ -153,12 +155,22 @@ function App() {
             <TodoItem
               key={todo.id}
               todo={todo}
-              onDelete={onDelete}
+              onDelete={() => setDeletingId(todo.id)}
               onToggleComplete={onToggleComplete}
             />
           ))}
         </div>
       </div>
+
+      {deletingId && (
+        <DeleteConfirmModal
+          onCancel={() => setDeletingId(null)}
+          onConfirm={() => {
+            handleDelete(deletingId);
+            setDeletingId(null);
+          }}
+        />
+      )}
     </div>
   );
 }
