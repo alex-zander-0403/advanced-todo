@@ -17,7 +17,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [theme, setTheme] = useState(getInitialTheme());
   const [deletingId, setDeletingId] = useState(null);
-  const [isDeletingCompletedModal, setIsDeletingCompletedModal] =
+  const [isDeletingCompletedModal, setIsDeletingCompleted] =
     useState(false);
 
   //
