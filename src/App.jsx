@@ -17,7 +17,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [theme, setTheme] = useState(getInitialTheme());
   const [deletingId, setDeletingId] = useState(null);
-  const [isDeletingCompletedModal, setIsDeletingCompleted] =
+  const [isDeletingCompletedModal, setIsDeletingCompletedModal] =
     useState(false);
 
   //
@@ -47,7 +47,7 @@ function App() {
 
   // -------------------
 
-  //
+  // add
   async function onAdd(text, deadline) {
     const newTodo = {
       id: Date.now(),
@@ -86,7 +86,7 @@ function App() {
     }
   }
 
-  //
+  // toggle done-todo
   async function onToggleComplete(id) {
     const todoToUpdate = todos.find((todo) => todo.id === id);
     if (!todoToUpdate) return;
@@ -118,7 +118,40 @@ function App() {
     }
   }
 
-  //
+  // editing
+  const handleUpdate = async (id, newText, newDeadline) => {
+    const todoToUpdate = todos.find((todo) => todo.id === id);
+    if (!todoToUpdate) return;
+
+    const updatedTodo = {
+      ...todoToUpdate,
+      text: newText,
+      deadline: newDeadline,
+    };
+
+    const updatedTodos = todos.map((todo) =>
+      todo.id === id ? updatedTodo : todo
+    );
+
+    setTodos(updatedTodos);
+
+    try {
+      await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTodo),
+      });
+
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+    } catch (error) {
+      console.error("Ошибка редактирования todo ->", error.message);
+      setTodos(todos);
+    }
+  };
+
+  // deleting
   async function handleDelete(id) {
     const prevTodos = todos;
     const updatedTodos = todos.filter((todo) => todo.id !== id);
@@ -143,7 +176,7 @@ function App() {
 
   function handleDeleteAllCompleted() {
     if (!hasCompletedTodos) return;
-    setIsDeletingCompleted(true);
+    setIsDeletingCompletedModal(true);
   }
 
   async function confirmDeleteCompleted() {
@@ -179,7 +212,7 @@ function App() {
     }
 
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
-    setIsDeletingCompleted(false);
+    setIsDeletingCompletedModal(false);
   }
 
   //
@@ -204,6 +237,7 @@ function App() {
               todo={todo}
               onDelete={() => setDeletingId(todo.id)}
               onToggleComplete={onToggleComplete}
+              onUpdate={handleUpdate}
             />
           ))}
         </div>
@@ -224,7 +258,9 @@ function App() {
         <DeleteConfirmModal
           onCancel={() => setIsDeletingCompletedModal(false)}
           onConfirm={confirmDeleteCompleted}
-          message={`Вы уверенны, что хотите удалить выполненные задачи? (${todos.filter((el) => el.isCompleted).length})`}
+          message={`Вы уверенны, что хотите удалить выполненные задачи? (${
+            todos.filter((el) => el.isCompleted).length
+          })`}
         />
       )}
 

@@ -1,46 +1,46 @@
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 //
-function TodoItem({ todo, onDelete, onToggleComplete }) {
+function TodoItem({ todo, onDelete, onToggleComplete, onUpdate }) {
   //
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
   const [editDeadline, setEditDeadline] = useState(todo.deadline || "");
-
-  //
-  const handleSave = async () => {
-    if (editText.trim()) {
-      setIsEditing(false);
-      // const updatedTodo = {
-      //   ...todo,
-      //   text: editText,
-      // };
-
-      // try {
-      //   await fetch(`${API_URL}/${todo.id}`, {
-      //     method: "PUT",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify(updatedTodo),
-      //   });
-
-      //   // localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
-      //   setIsEditing(false);
-      // } catch (error) {
-      //   console.error("Ошибка обновления текста ->", error.message);
-      // }
-    }
-  };
+  const editFormRef = useRef(null);
 
   //
   const handleToggle = () => {
     onToggleComplete(todo.id);
   };
 
+  const handleSave = useCallback(() => {
+    if (editText.trim()) {
+      onUpdate(todo.id, editText, editDeadline);
+    }
+    setIsEditing(false);
+  }, [editText, editDeadline, todo.id, onUpdate]);
+
+  const handleClickOutside = (e) => {
+    if (editFormRef.current && !editFormRef.current.contains(e.target)) {
+      handleSave();
+    }
+  };
+
+  useEffect(() => {
+    if (isEditing) {
+      document.addEventListener("click", handleClickOutside);
+      // console.log("addEventListener добавлен");
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+      // console.log("addEventListener удален");
+    };
+  }, [isEditing, handleSave]);
+
   //
   return (
-    <div className="group min-w-100 max-w-200 flex items-center justify-between gap-15 p-3 rounded-lg bg-page-light dark:bg-page-dark shadow-sm hover:shadow-md transition-shadow duration-300 border-gray-100">
+    <div className="group min-w-100 max-w-200 flex items-center justify-between gap-15 p-3 rounded-lg bg-page-light dark:bg-page-dark shadow-md hover:shadow-lg transition-shadow duration-300 border-gray-100">
       {/* done button */}
       <button
         onClick={handleToggle}
@@ -70,7 +70,10 @@ function TodoItem({ todo, onDelete, onToggleComplete }) {
 
       {/* main block - text + deadline*/}
       {isEditing ? (
-        <div className="flex flex-col w-full gap-2 items-stretch">
+        <div
+          className="flex flex-col w-full gap-2 items-stretch"
+          ref={editFormRef}
+        >
           <input
             className="w-full px-2 border-2 border-blue-500 rounded text-md bg-gray-400 text-gray-700"
             type="text"
@@ -88,12 +91,16 @@ function TodoItem({ todo, onDelete, onToggleComplete }) {
               // onKeyDown={(e) => e.key === "Enter" && handleSave()}
             />
 
-            <button className="px-2 rounded bg-blue-500" onClick={handleSave}>Ok</button>
-
+            <button className="px-2 rounded bg-blue-500" onClick={handleSave}>
+              Ok
+            </button>
           </div>
         </div>
       ) : (
-        <div className="flex items-center gap-5">
+        <div
+          className="flex items-center gap-5"
+          onDoubleClick={() => setIsEditing(true)}
+        >
           <div
             className={`${
               todo.isCompleted
@@ -103,10 +110,7 @@ function TodoItem({ todo, onDelete, onToggleComplete }) {
           >
             {todo.text}
           </div>
-          <div
-            className="flex flex-col items-center cursor-pointer"
-            onDoubleClick={() => setIsEditing(true)}
-          >
+          <div className="flex flex-col items-center cursor-pointer">
             {todo.deadline && (
               <span
                 className={`text-sm ${
