@@ -40,7 +40,7 @@ function TodoItem({ todo, onDelete, onToggleComplete, onUpdate }) {
 
   //
   return (
-    <div className="group min-w-100 max-w-200 flex items-center justify-between gap-15 p-3 rounded-lg bg-page-light dark:bg-page-dark shadow-md hover:shadow-lg transition-shadow duration-300 border-gray-100">
+    <div className="group min-w-100 max-w-200 flex items-center justify-between gap-15 p-3 rounded-lg bg-page-light dark:bg-page-dark shadow-md hover:shadow-lg transition-shadow duration-300">
       {/* done button */}
       <button
         onClick={handleToggle}
