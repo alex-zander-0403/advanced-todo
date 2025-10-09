@@ -11,7 +11,6 @@ import { DeleteCompletedButton } from "./components/DeleteCompletedButton";
 import MainContent from "./components/MainContent";
 
 //
-//
 function App() {
   //
   const [theme, setTheme] = useState(getInitialTheme());
