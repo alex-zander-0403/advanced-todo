@@ -9,7 +9,7 @@ export function useTodoManagement() {
   //
   const [todos, setTodos] = useState([]);
   const [deletingId, setDeletingId] = useState(null);
-  const [isDeletingCompletedModal, setIsDeletingCompletedModal] =
+  const [isDeletingCompleted, setIsDeletingCompleted] =
     useState(false);
 
   // start
@@ -163,7 +163,7 @@ export function useTodoManagement() {
 
   function handleDeleteAllCompleted() {
     if (!hasCompletedTodos) return;
-    setIsDeletingCompletedModal(true);
+    setIsDeletingCompleted(true);
   }
 
   async function confirmDeleteCompleted() {
@@ -199,7 +199,7 @@ export function useTodoManagement() {
     }
 
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
-    setIsDeletingCompletedModal(false);
+    setIsDeletingCompleted(false);
   }
 
   //
@@ -207,8 +207,8 @@ export function useTodoManagement() {
     todos,
     deletingId,
     setDeletingId,
-    isDeletingCompletedModal,
-    setIsDeletingCompletedModal,
+    isDeletingCompleted,
+    setIsDeletingCompleted,
 
     onAdd,
     handleUpdate,

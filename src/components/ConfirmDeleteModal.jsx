@@ -1,5 +1,14 @@
-function DeleteConfirmModal({ onCancel, onConfirm, message }) {
+function DeleteConfirmModal({
+  onCancel,
+  onConfirm,
+  message,
+  deletingId,
+  isDeletingCompleted,
+}) {
   //
+  const showModal = deletingId || isDeletingCompleted;
+
+  if (!showModal) return null;
 
   //
   return (
