@@ -1,4 +1,4 @@
-function DeleteConfirmModal({
+export function DeleteConfirmModal({
   onCancel,
   onConfirm,
   message,
@@ -40,5 +40,3 @@ function DeleteConfirmModal({
   );
 }
 
-//
-export default DeleteConfirmModal;

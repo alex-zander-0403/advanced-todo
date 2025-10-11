@@ -1,14 +1,13 @@
 import { useState } from "react";
-import TodoItem from "./components/TodoItem";
 
-import ToggleTheme from "./components/ToggleTheme";
+import { ToggleTheme } from "./components/ToggleTheme";
 import { getInitialTheme } from "./helpers/getInitialTheme";
 import { toggleTheme } from "./helpers/toggleTheme";
-import DeleteConfirmModal from "./components/ConfirmDeleteModal";
+import { DeleteConfirmModal } from "./components/DeleteConfirmModal";
 import { useTodoManagement } from "./hooks/useTodoManagement";
 
 import { DeleteCompletedButton } from "./components/DeleteCompletedButton";
-import MainContent from "./components/MainContent";
+import { MainContent } from "./components/MainContent";
 
 //
 function App() {
@@ -38,7 +37,7 @@ function App() {
       data-theme={theme}
       className="flex flex-col min-h-screen justify-center items-center bg-page-light dark:bg-page-dark p-6"
     >
-      <ToggleTheme theme={theme} toggleTheme={() => toggleTheme(setTheme)} />
+      <ToggleTheme toggleTheme={() => toggleTheme(setTheme)} />
 
       <MainContent
         todos={todos}
@@ -68,8 +67,6 @@ function App() {
           todos.filter((el) => el.isCompleted).length
         })`}
       />
-
-      {/*  */}
 
       <DeleteCompletedButton
         hasCompletedTodos={hasCompletedTodos}

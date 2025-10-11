@@ -5,7 +5,7 @@ import { TodoFilter } from "./TodoFilter";
 import { useState } from "react";
 
 //
-function MainContent({
+export function MainContent({
   todos,
   onAdd,
   setDeletingId,
@@ -39,4 +39,3 @@ function MainContent({
   );
 }
 
-export default MainContent;

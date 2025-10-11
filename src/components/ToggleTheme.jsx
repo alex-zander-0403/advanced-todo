@@ -1,4 +1,4 @@
-function ToggleTheme({ theme, toggleTheme }) {
+export function ToggleTheme({ toggleTheme }) {
   //
 
   return (
@@ -12,5 +12,3 @@ function ToggleTheme({ theme, toggleTheme }) {
     </div>
   );
 }
-
-export default ToggleTheme;

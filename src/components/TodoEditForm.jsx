@@ -25,7 +25,6 @@ export function TodoEditForm({
           type="datetime-local"
           value={editDeadline}
           onChange={(e) => setEditDeadline(e.target.value)}
-          // onKeyDown={(e) => e.key === "Enter" && handleSave()}
         />
 
         <button className="px-2 rounded bg-blue-500" onClick={handleSave}>
