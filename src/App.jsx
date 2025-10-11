@@ -1,11 +1,9 @@
 import { useState } from "react";
-
 import { ToggleTheme } from "./components/ToggleTheme";
 import { getInitialTheme } from "./helpers/getInitialTheme";
 import { toggleTheme } from "./helpers/toggleTheme";
 import { DeleteConfirmModal } from "./components/DeleteConfirmModal";
 import { useTodoManagement } from "./hooks/useTodoManagement";
-
 import { DeleteCompletedButton } from "./components/DeleteCompletedButton";
 import { MainContent } from "./components/MainContent";
 
@@ -28,6 +26,7 @@ function App() {
     hasCompletedTodos,
     handleDeleteAllCompleted,
     confirmDeleteCompleted,
+    onReorder,
   } = useTodoManagement();
 
   // --------------------------------
@@ -45,6 +44,7 @@ function App() {
         setDeletingId={setDeletingId}
         onToggleComplete={onToggleComplete}
         handleUpdate={handleUpdate}
+        onReorder={onReorder}
       />
 
       {/*  */}

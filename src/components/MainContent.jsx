@@ -1,5 +1,5 @@
 import AddTodo from "./AddTodo";
-import TodoList from "./TodoList";
+import { TodoList } from "./TodoList";
 import Header from "./Header";
 import { TodoFilter } from "./TodoFilter";
 import { useState } from "react";
@@ -11,6 +11,7 @@ export function MainContent({
   setDeletingId,
   onToggleComplete,
   handleUpdate,
+  onReorder,
 }) {
   //
   const [filter, setFilter] = useState("all");
@@ -34,8 +35,8 @@ export function MainContent({
         setDeletingId={setDeletingId}
         onToggleComplete={onToggleComplete}
         handleUpdate={handleUpdate}
+        onReorder={onReorder}
       />
     </div>
   );
 }
-
