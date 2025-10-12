@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-
-//
-const LOCAL_STORAGE_KEY = "todos";
-const API_URL = "https://68671e3ae3fefb261eddbed3.mockapi.io/api/v1/todos";
+import { LOCAL_STORAGE_KEY, API_URL } from "../constants/todos";
+import { loadFromLocalStorage, saveToLocalStorage } from "../helpers/storage";
+import { sortTodos } from "../helpers/todoHelpers";
 
 //
 export function useTodoManagement() {
@@ -14,13 +13,8 @@ export function useTodoManagement() {
   // start
   useEffect(() => {
     const loadInitialData = async () => {
-      const localStorageTodos = JSON.parse(
-        localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
-      );
-
-      const sortedLocalTodos = [...localStorageTodos].sort(
-        (a, b) => a.order - b.order
-      );
+      const localTodos = loadFromLocalStorage();
+      const sortedLocalTodos = sortTodos(localTodos);
       setTodos(sortedLocalTodos);
 
       try {
@@ -28,12 +22,10 @@ export function useTodoManagement() {
 
         if (response.ok) {
           const serverTodos = await response.json();
-          const sortedServerTodos = [...serverTodos].sort(
-            (a, b) => a.order - b.order
-          );
-
+          const sortedServerTodos = sortTodos(serverTodos);
           setTodos(sortedServerTodos);
-          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(serverTodos));
+
+          saveToLocalStorage(sortedServerTodos);
         }
       } catch (error) {
         console.error("Ошибка инициализации данных ->", error.message);
@@ -73,7 +65,7 @@ export function useTodoManagement() {
       );
 
       setTodos(syncedTodos);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(syncedTodos));
+      saveToLocalStorage(syncedTodos);
     } catch (error) {
       console.error("Ошибка добавления ->", error.message);
       setTodos(todos);
@@ -106,7 +98,7 @@ export function useTodoManagement() {
         body: JSON.stringify(updatedTodo),
       });
 
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+      saveToLocalStorage(updatedTodos);
     } catch (error) {
       console.error("Ошибка редактирования todo ->", error.message);
       setTodos(todos);
@@ -138,7 +130,7 @@ export function useTodoManagement() {
         body: JSON.stringify(updatedTodo),
       });
 
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+      saveToLocalStorage(updatedTodos);
     } catch (error) {
       console.error("Ошибка обновления ->", error.message);
       setTodos(todos);
@@ -157,7 +149,7 @@ export function useTodoManagement() {
         method: "DELETE",
       });
 
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+      saveToLocalStorage(updatedTodos);
     } catch (error) {
       console.error("Ошибка удаления ->", error.message);
       setTodos(prevTodos);
@@ -198,7 +190,7 @@ export function useTodoManagement() {
         )
       );
 
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+      saveToLocalStorage(updatedTodos);
     } catch (error) {
       console.error("Ошибка перемещения ->", error.message);
       setTodos(todos);
@@ -245,7 +237,7 @@ export function useTodoManagement() {
       );
     }
 
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
+    saveToLocalStorage(todos);
     setIsDeletingCompleted(false);
   }
 
