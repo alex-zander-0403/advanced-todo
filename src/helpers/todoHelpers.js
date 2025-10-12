@@ -6,6 +6,7 @@ export function sortTodos(todos) {
 
 //
 export function createNewTodo(text, deadline, order) {
+  //
   return {
     id: Date.now(),
     text,
@@ -13,5 +14,23 @@ export function createNewTodo(text, deadline, order) {
     createdAt: new Date().toISOString(),
     deadline: deadline || null,
     order,
+  };
+}
+
+//
+export function updatedTodoData(todoToUpdate, newText, newDeadline) {
+  //
+  return {
+    ...todoToUpdate,
+    text: newText,
+    deadline: newDeadline,
+  };
+}
+
+//
+export function toggleTodoCompletion(todo) {
+  return {
+    ...todo,
+    isCompleted: !todo.isCompleted,
   };
 }
