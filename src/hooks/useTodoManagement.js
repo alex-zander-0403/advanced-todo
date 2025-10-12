@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { LOCAL_STORAGE_KEY, API_URL } from "../constants/todos";
+import { API_URL } from "../constants/todos";
 import { loadFromLocalStorage, saveToLocalStorage } from "../helpers/storage";
-import { sortTodos } from "../helpers/todoHelpers";
+import { createNewTodo, sortTodos } from "../helpers/todoHelpers";
+import { fetchTodos } from "../api/todoApi";
 
 //
 export function useTodoManagement() {
@@ -18,7 +19,7 @@ export function useTodoManagement() {
       setTodos(sortedLocalTodos);
 
       try {
-        const response = await fetch(API_URL);
+        const response = await fetchTodos();
 
         if (response.ok) {
           const serverTodos = await response.json();
@@ -37,14 +38,8 @@ export function useTodoManagement() {
 
   // add
   async function onAdd(text, deadline) {
-    const newTodo = {
-      id: Date.now(),
-      text,
-      isCompleted: false,
-      createdAt: new Date().toISOString(),
-      deadline: deadline || null,
-      order: todos.length + 1,
-    };
+    
+    const newTodo = createNewTodo(text, deadline, todos.length + 1);
 
     const updatedTodos = [...todos, newTodo];
     setTodos(updatedTodos);
