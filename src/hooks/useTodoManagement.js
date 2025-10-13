@@ -1,18 +1,8 @@
 import { useEffect, useState } from "react";
-import { loadFromLocalStorage, saveToLocalStorage } from "../helpers/storage";
-import {
-  createNewTodo,
-  sortTodos,
-  toggleTodoCompletion,
-  updatedTodoData,
-} from "../helpers/todoHelpers";
-import {
-  createTodoRequest,
-  deleteTodoRequest,
-  fetchTodosRequest,
-  updateTodoRequest,
-} from "../api/todoApi";
 import { useTodoActions } from "./useTodoActions";
+import { useLocalStorage } from "./useLocalStorage";
+import { useTodoApi } from "./useTodoApi";
+import { useTodoHelpers } from "./useTodoHelpers";
 
 //
 export function useTodoManagement() {
@@ -20,6 +10,18 @@ export function useTodoManagement() {
   const [todos, setTodos] = useState([]);
   const [deletingId, setDeletingId] = useState(null);
   const [isDeletingCompleted, setIsDeletingCompleted] = useState(false);
+
+  const { loadFromLocalStorage, saveToLocalStorage } = useLocalStorage();
+
+  const {
+    fetchTodosRequest,
+    createTodoRequest,
+    updateTodoRequest,
+    deleteTodoRequest,
+  } = useTodoApi();
+
+  const { sortTodos, createNewTodo, updatedTodoData, toggleTodoCompletion } =
+    useTodoHelpers();
 
   const actions = useTodoActions({
     todos,
