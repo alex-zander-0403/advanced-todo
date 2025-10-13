@@ -32,7 +32,7 @@ export function DeadlineBlock({
 
       {!showDeadlineInput && (
         <button
-          className="self-start p-3 cursor-pointer transition-colors duration-300 text-gray-700 dark:text-txt-dark "
+          className="self-start p-3 cursor-pointer transition-colors duration-300 text-red-800 dark:text-red-700 hover:text-red-500"
           type="button"
           onClick={() => {
             setShowDeadlineInput(true);
