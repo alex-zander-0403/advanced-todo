@@ -7,6 +7,7 @@ import { DeleteButton } from "./DeleteButton";
 //
 import { useSortable } from "@dnd-kit/sortable";
 import { DragAndDropArea } from "./icons/DragAndDropArea";
+import formatDateTime from "../helpers/dateUtils";
 
 //
 function TodoItem({ todo, onDelete, onToggleComplete, onUpdate }) {
@@ -72,17 +73,20 @@ function TodoItem({ todo, onDelete, onToggleComplete, onUpdate }) {
       {...attributes}
       className="group min-w-100 max-w-200 flex items-center justify-between gap-15 p-3 rounded-lg border-1 border-gray-300 dark:border-gray-700  bg-page-light dark:bg-page-dark shadow-md hover:shadow-lg transition-shadow duration-300"
     >
-      <div
-        className="text-gray-800 dark:text-gray-500 cursor-grab active:cursor-grabbing"
-        {...listeners}
-      >
-        <DragAndDropArea />
+      <div className="flex justify-center items-center gap-3">
+        {/* DragAndDropArea */}
+        <div
+          className="text-gray-800 dark:text-gray-500 cursor-grab active:cursor-grabbing"
+          {...listeners}
+        >
+          <DragAndDropArea />
+        </div>
+        {/* done button */}
+        <CheckboxButton
+          isCompleted={todo.isCompleted}
+          handleToggle={handleToggle}
+        />
       </div>
-      {/* done button */}
-      <CheckboxButton
-        isCompleted={todo.isCompleted}
-        handleToggle={handleToggle}
-      />
 
       {/* main block - text + deadline*/}
       {isEditing ? (
@@ -98,8 +102,32 @@ function TodoItem({ todo, onDelete, onToggleComplete, onUpdate }) {
         <TodoInfo todo={todo} setIsEditing={setIsEditing} />
       )}
 
-      {/* delete button */}
-      <DeleteButton id={todo.id} onDelete={onDelete} />
+      <div className="flex justify-center items-center gap-3">
+        {/* create date & datedeadline */}
+        <div className="flex flex-col items-center cursor-pointer">
+          {todo.deadline && (
+            <span
+              className={`text-sm ${
+                todo.isCompleted ? "text-green-800" : "text-red-700"
+              }`}
+            >
+              сделать до: {formatDateTime(todo.deadline)}
+            </span>
+          )}
+          {todo.createdAt && (
+            <span
+              className={`text-sm  ${
+                todo.isCompleted ? "text-green-800" : "text-gray-500"
+              }`}
+            >
+              создано: {formatDateTime(todo.createdAt)}
+            </span>
+          )}
+        </div>
+
+        {/* delete button */}
+        <DeleteButton id={todo.id} onDelete={onDelete} />
+      </div>
     </div>
   );
 }

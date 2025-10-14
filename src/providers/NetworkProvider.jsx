@@ -33,7 +33,6 @@ function NetworkProvider({ children }) {
 
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
-    console.log("✅ Event listeners added");
 
     return () => {
       window.removeEventListener("online", handleOnline);

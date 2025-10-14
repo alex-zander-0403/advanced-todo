@@ -35,8 +35,6 @@ function App() {
 
   // --------------------------------
 
-
-
   return (
     <div
       data-theme={theme}
@@ -46,7 +44,7 @@ function App() {
         <NetworkNotification />
       </NetworkProvider>
 
-      <ToggleTheme toggleTheme={() => toggleTheme(setTheme)} />
+      <ToggleTheme theme={theme} toggleTheme={() => toggleTheme(setTheme)} />
 
       {/*  */}
       <Suspense fallback={<Loader />}>

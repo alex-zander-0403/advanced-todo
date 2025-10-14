@@ -59,8 +59,8 @@ function AddTodo({ onAdd }) {
             } else {
               temporaryTranscript += transcript;
             }
-            console.log("временный -->", temporaryTranscript);
-            console.log("финальный -->", finalTranscript);
+            // console.log("временный -->", temporaryTranscript);
+            // console.log("финальный -->", finalTranscript);
 
             if (finalTranscript) {
               finalTextRef.current =
@@ -105,6 +105,8 @@ function AddTodo({ onAdd }) {
 
       finalTextRef.current = "";
       stopListening();
+    } else {
+      alert("Введите текст");
     }
   }
 

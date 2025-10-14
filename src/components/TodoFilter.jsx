@@ -5,7 +5,7 @@ export function TodoFilter({ filter, setFilter }) {
 
   //
   return (
-    <div className="flex gap-3 mb-5">
+    <div className="flex gap-3 mb-1 mt-5">
       <button onClick={() => setFilter("all")} className={buttonStyle("all")}>
         Все
       </button>

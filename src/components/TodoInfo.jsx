@@ -17,22 +17,14 @@ export function TodoInfo({ todo, setIsEditing }) {
       >
         {todo.text}
       </div>
-      <div className="flex flex-col items-center cursor-pointer">
+      {/* <div className="flex flex-col items-center cursor-pointer">
         {todo.deadline && (
           <span
             className={`text-sm ${
               todo.isCompleted ? "text-green-800" : "text-red-700"
             }`}
           >
-            сделать до:{" "}
-            {/* {new Date(todo.deadline).toLocaleString("ru-RU", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })} */}
-            {formatDateTime(todo.deadline)}
+            сделать до: {formatDateTime(todo.deadline)}
           </span>
         )}
         {todo.createdAt && (
@@ -41,18 +33,10 @@ export function TodoInfo({ todo, setIsEditing }) {
               todo.isCompleted ? "text-green-800" : "text-gray-500"
             }`}
           >
-            создано:{" "}
-            {/* {new Date(todo.createdAt).toLocaleString("ru-RU", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })} */}
-            {formatDateTime(todo.createdAt)}
+            создано: {formatDateTime(todo.createdAt)}
           </span>
         )}
-      </div>
+      </div> */}
     </div>
   );
 }
