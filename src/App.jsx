@@ -1,11 +1,15 @@
-import { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { ToggleTheme } from "./components/ToggleTheme";
 import { getInitialTheme } from "./helpers/getInitialTheme";
 import { toggleTheme } from "./helpers/toggleTheme";
 import { DeleteConfirmModal } from "./components/DeleteConfirmModal";
 import { useTodoManagement } from "./hooks/useTodoManagement";
 import { DeleteCompletedButton } from "./components/DeleteCompletedButton";
-import { MainContent } from "./components/MainContent";
+import { Loader } from "./components/Loader";
+// import { MainContent } from "./components/MainContent";
+
+//
+const MainContent = React.lazy(() => import("./components/MainContent"));
 
 //
 function App() {
@@ -38,14 +42,18 @@ function App() {
     >
       <ToggleTheme toggleTheme={() => toggleTheme(setTheme)} />
 
-      <MainContent
-        todos={todos}
-        onAdd={onAdd}
-        setDeletingId={setDeletingId}
-        onToggleComplete={onToggleComplete}
-        handleUpdate={handleUpdate}
-        onReorder={onReorder}
-      />
+      {/*  */}
+
+      <Suspense fallback={<Loader />}>
+        <MainContent
+          todos={todos}
+          onAdd={onAdd}
+          setDeletingId={setDeletingId}
+          onToggleComplete={onToggleComplete}
+          handleUpdate={handleUpdate}
+          onReorder={onReorder}
+        />
+      </Suspense>
 
       {/*  */}
 
