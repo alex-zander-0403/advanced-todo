@@ -6,9 +6,9 @@ import { DeleteConfirmModal } from "./components/DeleteConfirmModal";
 import { useTodoManagement } from "./hooks/useTodoManagement";
 import { DeleteCompletedButton } from "./components/DeleteCompletedButton";
 import { Loader } from "./components/Loader";
-// import { MainContent } from "./components/MainContent";
+import { NetworkNotification } from "./components/NetworkNotification";
+import NetworkProvider from "./providers/NetworkProvider";
 
-//
 const MainContent = React.lazy(() => import("./components/MainContent"));
 
 //
@@ -35,15 +35,20 @@ function App() {
 
   // --------------------------------
 
+
+
   return (
     <div
       data-theme={theme}
       className="flex flex-col min-h-screen justify-center items-center bg-page-light dark:bg-page-dark p-6"
     >
+      <NetworkProvider>
+        <NetworkNotification />
+      </NetworkProvider>
+
       <ToggleTheme toggleTheme={() => toggleTheme(setTheme)} />
 
       {/*  */}
-
       <Suspense fallback={<Loader />}>
         <MainContent
           todos={todos}
