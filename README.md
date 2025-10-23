@@ -1,12 +1,64 @@
-# React + Vite
+# React Advanced Todo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Расширенное приложение для управления задачами с поддержкой тем оформления, drag-and-drop, сетевым статусом и другими функциями.
 
-Currently, two official plugins are available:
+<div align="center">
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![React Todo](screenshots/react-advanced-todo.png)
+_Интерфейс_
 
-## Expanding the ESLint configuration
+</div>
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Технологии
+
+- React 19
+- Vite
+- Tailwind CSS
+- DnD Kit (для drag-and-drop)
+- React Icons
+- Кастомные хуки и контексты
+
+## Основные функции
+
+✅ Темное/светлое оформление  
+✅ Drag-and-drop для изменения порядка задач  
+✅ Подтверждение удаления (одиночные/все выполненные)  
+✅ Голосовой ввод задач - SpeechRecognition API
+✅ Сетевой статус (онлайн/оффлайн)  
+✅ localStorage для сохранения состояния  
+✅ Адаптивный дизайн  
+✅ Ленивая загрузка компонентов
+
+## Установка и запуск
+
+## Структура проекта
+
+```
+src/
+├── components/       # UI компоненты
+├── contexts/         # React контексты
+├── hooks/            # Кастомные хуки
+├── providers/        # Провайдеры контекстов
+├── helpers/          # Вспомогательные функции
+├── api/              # API взаимодействие
+└── assets/           # Статические ресурсы
+```
+
+## Кастомные хуки
+
+Проект использует несколько кастомных хуков для управления состоянием и логикой:
+
+- `useTodoManagement` - Главный хук, объединяющий всю логику управления состоянием
+- `useLocalStorage` - Работа с локальным хранилищем (загрузка/сохранение задач)
+- `useTodoApi` - API взаимодействие с бэкендом (CRUD операции)
+- `useTodoHelpers` - Вспомогательные функции (сортировка, создание/обновление задач)
+- `useTodoActions` - Основные действия с задачами (добавление, редактирование, удаление)
+
+## Кастомный провайдер - NetworkProvider
+
+Обеспечивает мониторинг сетевого статуса приложения:
+
+- Автоматически определяет онлайн/оффлайн состояние
+- Показывает системные уведомления при изменении сети
+- Предоставляет контекст для доступа к сетевому статусу
+- Интегрирован в корневой компонент приложения (App.jsx)
